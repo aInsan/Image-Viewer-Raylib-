@@ -29,6 +29,7 @@ Camera2D camera = { 0 };
 bool flipHorizontal = false;
 bool flipVertical = false;
 bool info_mode = false;
+bool antialiasing = true; //True == Bilinear, False == Nearest Neighbour
 
 void reset_view(Texture2D texture)
 {
@@ -37,9 +38,19 @@ void reset_view(Texture2D texture)
   camera.rotation = 0.0f;
   flipHorizontal = false;
   flipVertical = false;
+  antialiasing = true;
+  SetTextureFilter(texture, TEXTURE_FILTER_BILINEAR);
+
 }
 
-
+// Code from /u/notLinode on reddit
+void DrawOutlinedText(const char *text, int posX, int posY, int fontSize, Color color, int outlineSize, Color outlineColor) {
+    DrawText(text, posX - outlineSize, posY - outlineSize, fontSize, outlineColor);
+    DrawText(text, posX + outlineSize, posY - outlineSize, fontSize, outlineColor);
+    DrawText(text, posX - outlineSize, posY + outlineSize, fontSize, outlineColor);
+    DrawText(text, posX + outlineSize, posY + outlineSize, fontSize, outlineColor);
+    DrawText(text, posX, posY, fontSize, color);
+}
 int main(int argc, char **argv)
 {
   if (argc < 2)
@@ -147,8 +158,8 @@ int main(int argc, char **argv)
     reset_view(texture);
     camera.offset = (Vector2){ GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
 
-    bool antialiasing = true;
-
+    antialiasing = true;
+    SetTextureFilter(texture, TEXTURE_FILTER_BILINEAR);
 
     // --------------------------------------------------
     // Main loop
@@ -270,8 +281,19 @@ int main(int argc, char **argv)
         
         if(info_mode == true)
         {
-        DrawText(TextFormat("%d / %d", current + 1, imageCount), 10, 10, 20, GRAY);
-        DrawText(GetFileName(images[current]), 10, 35, 20, LIGHTGRAY);
+            DrawRectangle(0,0, GetScreenWidth(), 200, (Color) {0x44,0x44,0x44,0x44});
+            DrawText(TextFormat("%d / %d", current + 1, imageCount), 10, 10, 30, WHITE);
+            DrawText(GetFileName(images[current]), 10, 35, 30, WHITE);
+
+            struct stat st;
+            stat(images[current], &st);
+            float size_mb = (float)st.st_size / (1024 * 1024);
+
+            DrawText(TextFormat("Resolution: %dx%d", texture.width, texture.height), 10, 60, 30, WHITE);
+            DrawText(TextFormat("Size: %.2fMB", size_mb), 10, 85, 30, WHITE);
+            DrawText(TextFormat("Type: %s", GetFileExtension(images[current])), 10, 110, 30, WHITE);
+            DrawText(TextFormat("Zoom: %.2f%%", camera.zoom * 100), 10, 135, 30, WHITE);
+            DrawText(TextFormat("Rotation: %.0f", camera.rotation), 10, 160, 30, WHITE);
         }
         EndDrawing();
     }

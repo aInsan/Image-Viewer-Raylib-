@@ -49,9 +49,31 @@ int main(int argc, char **argv)
         return 1;
   }
 
-    if (argv[1] == "--help")
+  if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0)
   {
-    
+    printf(
+      "r-image-viewer\n"
+      "A simple, fast, minimalist image viewer built with C and the raylib library.\n\n"
+      "Usage:\n"
+      "  ./iv path/to/your/image.png\n"
+      "  ./iv path/to/your/directory/\n\n"
+      "Controls:\n"
+      "  Right Arrow: Next image in directory\n"
+      "  Left Arrow:  Previous image in directory\n"
+      "  Mouse Wheel: Zoom in/out at cursor\n"
+      "  Ctrl + + / -:Zoom in/out at center\n"
+      "  Mouse Left:  Pan image\n"
+      "  W, A, S, D:  Pan image\n"
+      "  Q, E:        Rotate image\n"
+      "  R:           Reset rotation\n"
+      "  H:           Flip horizontally\n"
+      "  V:           Flip vertically\n"
+      "  F:           Reset all view changes\n"
+      "  I:           Toggle info display\n"
+      "  Ctrl + A:    Toggle anti-aliasing\n"
+      "  Esc:         Quit\n"
+    );
+    return 0;
   }
 
   // --------------------------------------------------

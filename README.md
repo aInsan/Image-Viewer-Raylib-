@@ -55,11 +55,11 @@ On an Arch-based distro, you can install `raylib` with:
 ```bash
 sudo pacman -S raylib
 ```
-```
-```
 
 Then, compile the program using the following command:
 ```bash
 gcc main.c -o iv -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-# --- If you are on wayland and not X11 you can simply run the build command with out the x11 linker
+# --- If you are on wayland and not X11,
+#     you can simply run the build command
+#     without the -lX11 flag
 ```

@@ -172,6 +172,7 @@ int main(int argc, char **argv)
         if (IsWindowResized())
         {
             camera.offset = (Vector2){ GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
+            reset_view(texture);
         }
 
         // Navigation
